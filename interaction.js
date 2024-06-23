@@ -57,6 +57,7 @@ function setListeners() {
 function getLinesFromTable(_table) {
   console.log("row counts :", _table.getRowCount());
   let prev_id = 0;
+  let actural_id = 0;
   let lines = [];
   for (let i = 0; i < _table.getRowCount(); i++) {
     let frame = i;
@@ -71,10 +72,11 @@ function getLinesFromTable(_table) {
         // console.log("no", id);
         continue;
       } else {
-        let new_line = new LogLine(id);
+        let new_line = new LogLine(actural_id);
         new_line.addPoint(u, v, i);
         lines.push(new_line);
         prev_id = id;
+        actural_id += 1;
       }
     } else {
       console.log("same");
@@ -89,7 +91,12 @@ class LogLine {
   constructor(_id) {
     this.points = [];
     this.id = _id;
-    this.color = color(random(100, 255), random(100, 255), random(100, 255));
+    this.color = color(
+      random(100, 255),
+      random(100, 255),
+      random(100, 255),
+      200
+    );
   }
   addPoint(_x, _y, _frame) {
     let point = { x: _x, y: _y, f: _frame };
@@ -111,6 +118,15 @@ class LogLine {
 
   showIntersection(_mouse_x, _mouse_y) {
     for (let i = 0; i < this.points.length - 1; i++) {
+      if (i == 0) {
+        noStroke();
+        fill(255, 100);
+        text(
+          String(this.id),
+          this.points[i].x * size.x,
+          this.points[i].y * size.y
+        );
+      }
       let distance_info = distToSegment(
         _mouse_x,
         _mouse_y,
@@ -125,7 +141,7 @@ class LogLine {
         circle(distance_info.intersection.x, distance_info.intersection.y, 100);
         fill(255);
         noStroke();
-        text("touching : " + String(this.id), 50, 100);
+        text("touching_id : " + String(this.id), 50, 100);
         text("points_num : " + String(this.points.length), 50, 120);
       }
     }
