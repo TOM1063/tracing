@@ -27,7 +27,8 @@ function setup() {
 let f = 0;
 
 function draw() {
-  background(0);
+  image(img, 0, 0, size.x, size.y);
+  background(0, 0, 0, 200);
   console.log("Draw");
   for (let log_line of lines) {
     log_line.showIntersection(mouseX, mouseY);
@@ -36,7 +37,7 @@ function draw() {
   noStroke();
   fill(255);
   let fps = frameRate();
-  text(round(fps, 2), 50, 20);
+  text("FPS : " + String(round(fps, 2)), 50, 20);
   fill(255, 255, 255, 200);
   circle(mouseX, mouseY, 10);
 }
