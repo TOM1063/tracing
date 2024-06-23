@@ -27,6 +27,9 @@ function setup() {
 let f = 0;
 
 function draw() {
+  stroke(255, 30);
+  noFill();
+  ellipse(mouseX, mouseY, 100, 100);
   console.log("draw");
   for (let log_line of lines) {
     let prev_point = null;
