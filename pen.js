@@ -91,16 +91,16 @@ function player_graphics() {
   background(255);
   player_graph.fill(255);
   player_graph.stroke(0);
-  pen(mouseX, mouseY, stroke_size, player_graph);
+  circle_pen(mouseX, mouseY, stroke_size, player_graph);
 
   if (prev_point) {
     let dist_from_prev = int(dist(prev_point.x, prev_point.y, mouseX, mouseY));
-    let factor = dist_from_prev / stroke_size;
+    let factor = (dist_from_prev / stroke_size) * 1.2;
 
     for (let i = 0; i < factor; i++) {
       let div_x = (prev_point.x * (factor - i) + mouseX * i) / factor;
       let div_y = (prev_point.y * (factor - i) + mouseY * i) / factor;
-      pen(div_x, div_y, stroke_size, player_graph);
+      circle_pen(div_x, div_y, stroke_size, player_graph);
     }
     prev_point.x = mouseX;
     prev_point.y = mouseY;
@@ -139,10 +139,22 @@ function setThin() {
 
 function pen(_x, _y, _rad, _graphics) {
   let points = [];
-  for (let i = 0; i < _rad * 10; i++) {
+  for (let i = 0; i < _rad * _rad; i++) {
     let x = _x + random(-_rad, _rad);
     let y = _y + random(-_rad, _rad);
     _graphics.point(x, y);
+  }
+  // for(let i = 0; i < 100; i ++) {
+  //       points.push(new p5.Vector(random(-_rad,_rad),random(-_rad,_rad)))
+  // }
+}
+
+function circle_pen(_x, _y, _rad, _graphics) {
+  let points = [];
+  for (let i = -_rad; i < _rad; i += 1 / (_rad * 2)) {
+    let border = Math.sin(Math.acos(i / _rad)) * _rad;
+    let x = _x + random(-border, border);
+    _graphics.point(x, _y + i);
   }
   // for(let i = 0; i < 100; i ++) {
   //       points.push(new p5.Vector(random(-_rad,_rad),random(-_rad,_rad)))
