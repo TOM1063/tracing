@@ -6,3 +6,11 @@ body {
     margin:0;
     position:fixed;
 }
+
+.ui {
+    width:100vw;
+    height:100vh;
+    position:fixed;
+    position:absolute;
+
+}
