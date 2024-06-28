@@ -69,6 +69,11 @@ function mouseReleased() {
   prev_logline = false;
 }
 
+function touchEnded() {
+  prev_point = null;
+  prev_logline = false;
+}
+
 function setListeners() {
   window.addEventListener("resize", () => {
     size.x = window.innerWidth;
