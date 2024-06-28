@@ -19,3 +19,8 @@ canvas {
     position:absolute;
     position:fixed;
 }
+
+.input_video {
+    visibility: hidden;
+    display: none;
+}
