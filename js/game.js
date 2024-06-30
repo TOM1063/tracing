@@ -105,8 +105,8 @@ function setup(p) {
   console.log("setup");
 
   start_button = p.createButton("スタート");
-  start_button.position(size.x / 2, size.y / 2 + 100);
-  start_button.size(100, 10);
+  start_button.position(size.x / 2 - 50, size.y / 2 + 100);
+  start_button.size(100, 20);
   start_button.mousePressed(start);
 }
 
@@ -138,7 +138,7 @@ function draw(p) {
 function draw_openning(p) {
   p.background(255);
   p.textSize(20);
-  p.text("追いかけて！！", size.x / 2, size.y / 2);
+  p.text("追いかけて！！", size.x / 2 - 60, size.y / 2);
   p.textSize(15);
 }
 
