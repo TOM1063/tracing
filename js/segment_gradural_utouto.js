@@ -50,6 +50,9 @@ function setup(p) {
   slider = p.createSlider(0, 10, 8, 0.1);
   slider.position(50, 80);
   slider.size(200);
+
+  p.image(img, 0, 0, size.x, size.y);
+  p.background(0, 100);
 }
 
 function draw(p) {
@@ -61,7 +64,7 @@ function draw(p) {
 }
 function draw_loaded(p) {
   let speed = 10 - slider.value();
-  loaded_layer.background(0);
+  // loaded_layer.background(0);
   for (let line of loaded_lines) {
     let points_length = line.points_length();
     if (points_length > 5) {
@@ -73,9 +76,9 @@ function draw_loaded(p) {
       for (let i = 0; i < fract - 1; i++) {
         const point1 = line.get_point(i);
         const point2 = line.get_point(i + 1);
-        loaded_layer.stroke(200 * (i / fract + 0.1));
+        loaded_layer.stroke(250 * (i / fract + 0.1), 250, 100);
         loaded_layer.strokeWeight(3);
-        loaded_layer.fill(0);
+        // loaded_layer.fill(0);
         loaded_layer.line(
           point1.x() * size.x,
           point1.y() * size.y,
