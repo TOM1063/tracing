@@ -232,6 +232,8 @@ function getLinesFromTable(_table) {
 class Particle {
   constructor(_x, _y, _size, p) {
     this.life = p.random(10);
+    this.speed = p.random(10) / 10;
+    this.seed = p.random(100);
     this.sizze = _size;
     this.angle = p.random(p.PI * 2);
     this.vector = new p5.Vector(p.sin(this.angle), p.cos(this.angle));
@@ -241,16 +243,18 @@ class Particle {
     this.old = 0;
   }
   update(p) {
-    this.vector.x += (2 * p.noise(p.random(100), 100, this.fract) - 1) * 0.1;
-    this.vector.y += (2 * p.noise(p.random(100), 0, this.fract) - 1) * 0.1;
+    this.vector.x +=
+      (2 * p.noise(this.seed, 100, this.fract) - 1) * 0.4 * this.speed;
+    this.vector.y +=
+      (2 * p.noise(this.seed - 100, 120, this.fract) - 1) * 0.4 * this.speed;
     this.x += this.vector.x;
     this.y += this.vector.y;
-    this.fract += 0.2;
+    this.fract += 0.5;
     this.old = this.fract / this.life;
   }
   display(_graphic) {
     _graphic.noStroke();
     _graphic.fill(255, 100);
-    _graphic.circle(this.x, this.y, 5);
+    _graphic.circle(this.x, this.y, 3);
   }
 }
