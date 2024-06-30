@@ -1,0 +1,14 @@
+{
+  "name": "wasm_logline",
+  "version": "0.1.0",
+  "files": [
+    "wasm_logline_bg.wasm",
+    "wasm_logline.js",
+    "wasm_logline.d.ts"
+  ],
+  "module": "wasm_logline.js",
+  "types": "wasm_logline.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
