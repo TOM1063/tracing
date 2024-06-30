@@ -19,11 +19,15 @@ let img;
 
 let stroke_size = 2;
 
+let particles = [];
+
 let current_id = 0;
 let current_loaded_point;
 let prev_point;
 let prev_logline;
 let user_lines = [];
+
+let effect_layer;
 
 //---------ui
 let slider;
@@ -62,6 +66,9 @@ function setup(p) {
   user_layer = p.createGraphics(size.x, size.y);
   user_layer.clear();
 
+  effect_layer = p.createGraphics(size.x, size.y);
+  effect_layer.clear();
+
   slider = p.createSlider(0, 10, 8, 0.1);
   slider.position(50, 80);
   slider.size(200);
@@ -69,6 +76,7 @@ function setup(p) {
 
 function draw(p) {
   draw_loaded(p);
+  draw_particles(p);
   p.image(user_layer, 0, 0);
   p.noStroke();
   p.fill(255);
@@ -97,21 +105,15 @@ function draw_loaded(p) {
               size.y
             )
           ) {
-            console.log("hit");
-            loaded_layer.noStroke();
-            loaded_layer.fill(255, 200, 10, 100);
-            loaded_layer.circle(point2.x() * size.x, point2.y() * size.y, 30);
+            // console.log("hit");
+            // loaded_layer.noStroke();
+            // loaded_layer.fill(255, 200, 10, 100);
+            // loaded_layer.circle(point2.x() * size.x, point2.y() * size.y, 30);
+            particles.push(
+              new Particle(point2.x() * size.x, point2.y() * size.y, 100, p)
+            );
           }
         }
-        //   loaded_layer.stroke(200 * (i / fract + 0.1), 10);
-        //   loaded_layer.strokeWeight(4);
-        //   loaded_layer.noFill();
-        //   loaded_layer.line(
-        //     point1.x() * size.x,
-        //     point1.y() * size.y,
-        //     point2.x() * size.x,
-        //     point2.y() * size.y
-        //   );
         loaded_layer.stroke(200 * (i / fract + 0.1), 200);
         loaded_layer.strokeWeight(2);
         loaded_layer.line(
@@ -120,14 +122,6 @@ function draw_loaded(p) {
           point2.x() * size.x,
           point2.y() * size.y
         );
-        // loaded_layer.stroke(200 * (i / fract + 0.1), 10);
-        // loaded_layer.strokeWeight(10);
-        // loaded_layer.line(
-        //   point1.x() * size.x,
-        //   point1.y() * size.y,
-        //   point2.x() * size.x,
-        //   point2.y() * size.y
-        // );
       }
     }
   }
@@ -140,29 +134,18 @@ function mouseDragged(p) {
   player_logs(f, p);
 }
 
-// function player_graphics(p) {
-//   user_layer.fill(255);
-//   user_layer.stroke(255);
-//   circle_pen(p.mouseX, p.mouseY, stroke_size, user_layer);
-
-//   if (prev_point) {
-//     let dist_from_prev = p.int(
-//       p.dist(prev_point.x, prev_point.y, p.mouseX, p.mouseY)
-//     );
-//     let factor = (dist_from_prev / stroke_size) * 10;
-
-//     for (let i = 0; i < factor; i++) {
-//       let div_x = (prev_point.x * (factor - i) + p.mouseX * i) / factor;
-//       let div_y = (prev_point.y * (factor - i) + p.mouseY * i) / factor;
-//       circle_pen(div_x, div_y, stroke_size, user_layer);
-//     }
-//     prev_point.x = p.mouseX;
-//     prev_point.y = p.mouseY;
-//   } else {
-//     prev_point = new p5.Vector(p.mouseX, p.mouseY);
-//   }
-// }
-
+function draw_particles(p) {
+  effect_layer.clear();
+  for (let i = 0; i < particles.length; i++) {
+    let particle = particles[i];
+    particle.update(p);
+    particle.display(effect_layer);
+    if (particle.life > 10) {
+      particles.splice(i, 1);
+    }
+  }
+  p.image(effect_layer, 0, 0);
+}
 function player_logs(f, p) {
   if (prev_logline) {
     prev_logline.add_point(p.mouseX / size.x, p.mouseY / size.y, f);
@@ -233,10 +216,33 @@ function getLinesFromTable(_table) {
   return lines;
 }
 
-function circle_pen(_x, _y, _stroke, _graphic) {
-  _graphic.fill(255);
-  _graphic.stroke(200, 100);
-  _graphic.circle(_x, _y, _stroke);
-  _graphic.stroke(200, 10);
-  _graphic.circle(_x, _y, _stroke);
+// function circle_pen(_x, _y, _stroke, _graphic) {
+//   _graphic.fill(255);
+//   _graphic.stroke(200, 100);
+//   _graphic.circle(_x, _y, _stroke);
+//   _graphic.stroke(200, 10);
+//   _graphic.circle(_x, _y, _stroke);
+// }
+
+class Particle {
+  constructor(_x, _y, _size, p) {
+    this.life = 0;
+    this.sizze = _size;
+    this.angle = p.random(p.PI * 2);
+    this.vector = new p5.Vector(p.sin(this.angle), p.cos(this.angle));
+    this.x = _x;
+    this.y = _y;
+  }
+  update(p) {
+    this.vector.x += (2 * p.noise(p.random(100), 100, this.life) - 1) * 0.1;
+    this.vector.y += (2 * p.noise(p.random(100), 0, this.life) - 1) * 0.1;
+    this.x += this.vector.x;
+    this.y += this.vector.y;
+    this.life += 0.4;
+  }
+  display(_graphic) {
+    _graphic.noStroke();
+    _graphic.fill(255, 100);
+    _graphic.circle(this.x, this.y, 5);
+  }
 }

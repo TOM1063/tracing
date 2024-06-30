@@ -33,7 +33,7 @@ input[type="range"] {
     cursor: pointer;
     width: 100%;
     /* Track のスタイル */
-    background: #ddafef;
+    background: #ffffff;
     height: 8px;
     border-radius: 8px;
   }
