@@ -95,12 +95,12 @@ function draw_loaded(p) {
         const point1 = line.get_point(i);
         const point2 = line.get_point(i + 1);
 
-        current_loaded_point = point2;
+        current_loaded_point = line.get_point(fract);
         for (let user_line of user_lines) {
           if (
             user_line.is_intersection(
-              point2.x() * size.x,
-              point2.y() * size.y,
+              current_loaded_point.x() * size.x,
+              current_loaded_point.y() * size.y,
               size.x,
               size.y
             )
@@ -110,7 +110,12 @@ function draw_loaded(p) {
             // loaded_layer.fill(255, 200, 10, 100);
             // loaded_layer.circle(point2.x() * size.x, point2.y() * size.y, 30);
             particles.push(
-              new Particle(point2.x() * size.x, point2.y() * size.y, 100, p)
+              new Particle(
+                current_loaded_point.x() * size.x,
+                current_loaded_point.y() * size.y,
+                100,
+                p
+              )
             );
           }
         }
@@ -140,7 +145,7 @@ function draw_particles(p) {
     let particle = particles[i];
     particle.update(p);
     particle.display(effect_layer);
-    if (particle.life > 10) {
+    if (particle.old > 1.0) {
       particles.splice(i, 1);
     }
   }
@@ -226,19 +231,22 @@ function getLinesFromTable(_table) {
 
 class Particle {
   constructor(_x, _y, _size, p) {
-    this.life = 0;
+    this.life = p.random(10);
     this.sizze = _size;
     this.angle = p.random(p.PI * 2);
     this.vector = new p5.Vector(p.sin(this.angle), p.cos(this.angle));
     this.x = _x;
     this.y = _y;
+    this.fract = 0;
+    this.old = 0;
   }
   update(p) {
-    this.vector.x += (2 * p.noise(p.random(100), 100, this.life) - 1) * 0.1;
-    this.vector.y += (2 * p.noise(p.random(100), 0, this.life) - 1) * 0.1;
+    this.vector.x += (2 * p.noise(p.random(100), 100, this.fract) - 1) * 0.1;
+    this.vector.y += (2 * p.noise(p.random(100), 0, this.fract) - 1) * 0.1;
     this.x += this.vector.x;
     this.y += this.vector.y;
-    this.life += 0.4;
+    this.fract += 0.2;
+    this.old = this.fract / this.life;
   }
   display(_graphic) {
     _graphic.noStroke();
