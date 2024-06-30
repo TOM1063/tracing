@@ -109,11 +109,9 @@ function draw_loaded(p) {
             // loaded_layer.fill(255, 200, 10, 100);
             // loaded_layer.circle(point2.x() * size.x, point2.y() * size.y, 30);
             particles.push(
-              new Particle(
+              new Wave(
                 current_loaded_point.x() * size.x,
-                current_loaded_point.y() * size.y,
-                100,
-                p
+                current_loaded_point.y() * size.y
               )
             );
           }
@@ -140,11 +138,12 @@ function mouseDragged(p) {
 
 function draw_particles(p) {
   effect_layer.clear();
+  console.log(particles);
   for (let i = 0; i < particles.length; i++) {
     let particle = particles[i];
-    particle.update(p);
+    particle.update(effect_layer);
     particle.display(effect_layer);
-    if (particle.old > 1.0) {
+    if (particle.radius > 40.0) {
       particles.splice(i, 1);
     }
   }
@@ -228,32 +227,23 @@ function getLinesFromTable(_table) {
 //   _graphic.circle(_x, _y, _stroke);
 // }
 
-class Particle {
-  constructor(_x, _y, _size, p) {
-    this.life = p.random(10);
-    this.speed = p.random(10) / 10;
-    this.seed = p.random(100);
-    this.sizze = _size;
-    this.angle = p.random(p.PI * 2);
-    this.vector = new p5.Vector(p.sin(this.angle), p.cos(this.angle));
+class Wave {
+  constructor(_x, _y) {
     this.x = _x;
     this.y = _y;
-    this.fract = 0;
-    this.old = 0;
+    this.radius = 0;
   }
-  update(p) {
-    this.vector.x +=
-      (2 * p.noise(this.seed, 100, this.fract) - 1) * 0.4 * this.speed;
-    this.vector.y +=
-      (2 * p.noise(this.seed - 100, 120, this.fract) - 1) * 0.4 * this.speed;
-    this.x += this.vector.x;
-    this.y += this.vector.y;
-    this.fract += 0.5;
-    this.old = this.fract / this.life;
+  update() {
+    this.radius += 2;
   }
   display(_graphic) {
-    _graphic.noStroke();
-    _graphic.fill(255, 100);
-    _graphic.circle(this.x, this.y, 3);
+    // _graphic.noStroke();
+    // _graphic.fill(255, 100);
+    // _graphic.fill(255, 0.9);
+    _graphic.noFill();
+    _graphic.stroke(255, 6);
+    _graphic.strokeWeight(1);
+    _graphic.circle(this.x, this.y, 10 * Math.sqrt(this.radius));
+    // _graphic.circle(this.x, this.y, this.radius);
   }
 }
