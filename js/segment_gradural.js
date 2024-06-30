@@ -11,6 +11,8 @@ let loaded_lines;
 
 let loaded_layer;
 
+let ui_layer;
+
 let img;
 
 //---------ui
@@ -53,7 +55,7 @@ function setup(p) {
 function draw(p) {
   draw_loaded(p);
   p.noStroke();
-  p.fill(0);
+  p.fill(255);
   let fps = p.frameRate();
   p.text("FPS : " + String(p.round(fps, 2)), 50, 50);
 }

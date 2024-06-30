@@ -24,3 +24,17 @@ canvas {
     visibility: hidden;
     display: none;
 }
+
+
+input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    /* Track のスタイル */
+    background: #ddafef;
+    height: 8px;
+    border-radius: 8px;
+  }
+   
